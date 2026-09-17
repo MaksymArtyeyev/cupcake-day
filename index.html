@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Cupcake Day</title>
+  <style>
+    :root {
+      --pink: #ffb7d5;
+      --pink-deep: #ff8ec4;
+      --lavender: #d4b8ff;
+      --mint: #b8f2e6;
+      --peach: #ffd4b8;
+      --cream: #fff8fb;
+      --frosting: #fff0f7;
+      --wrapper: #ff9ec8;
+      --ink: #7a5a6e;
+      --shadow: rgba(255, 142, 196, 0.35);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Segoe UI", "Comic Sans MS", "Chalkboard SE", "Nunito", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 18%, #ffe4f1 0%, transparent 42%),
+        radial-gradient(circle at 88% 12%, #e8ddff 0%, transparent 40%),
+        radial-gradient(circle at 70% 88%, #d9fff4 0%, transparent 45%),
+        radial-gradient(circle at 20% 80%, #ffe8d6 0%, transparent 40%),
+        linear-gradient(160deg, #fff5fa, #f3e9ff 50%, #e8fff8);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(2px 2px at 30% 60%, rgba(255,200,230,0.8), transparent),
+        radial-gradient(1.5px 1.5px at 70% 30%, rgba(255,255,255,0.85), transparent),
+        radial-gradient(2px 2px at 85% 70%, rgba(210,230,255,0.8), transparent),
+        radial-gradient(1.5px 1.5px at 50% 80%, rgba(255,255,255,0.7), transparent);
+      animation: twinkle 4s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    @keyframes twinkle {
+      from { opacity: 0.45; }
+      to { opacity: 1; }
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 1.1rem 1rem 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0.2rem 0 0.15rem;
+      font-size: clamp(1.6rem, 6vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      background: linear-gradient(90deg, #ff7eb3, #c89bff, #7ed9c4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.5);
+    }
+
+    .subtitle {
+      margin: 0 0 1rem;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    .hint {
+      display: inline-block;
+      margin-bottom: 0.85rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 4px 14px var(--shadow);
+      font-size: 0.82rem;
+      transition: opacity 0.3s;
+    }
+
+    .stage {
+      position: relative;
+      width: min(100%, 340px);
+      height: 320px;
+      margin: 0 auto 1.1rem;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,240,248,0.55));
+      box-shadow:
+        0 10px 28px var(--shadow),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+      overflow: hidden;
+      touch-action: none;
+      cursor: pointer;
+    }
+
+    .cupcake {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      transform: translate(-50%, -50%);
+      width: 180px;
+      height: 210px;
+      filter: drop-shadow(0 10px 14px rgba(255, 142, 196, 0.35));
+    }
+
+    .wrapper {
+      position: absolute;
+      left: 50%;
+      bottom: 8px;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 78px;
+      background: linear-gradient(180deg, #ffc2d9, var(--wrapper));
+      border-radius: 8px 8px 28px 28px;
+      overflow: hidden;
+    }
+
+    .wrapper::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0 10px,
+        rgba(255,255,255,0.35) 10px 14px
+      );
+    }
+
+    .cake {
+      position: absolute;
+      left: 50%;
+      bottom: 72px;
+      transform: translateX(-50%);
+      width: 118px;
+      height: 36px;
+      background: linear-gradient(180deg, #ffe8c8, #f5c98a);
+      border-radius: 50% 50% 40% 40%;
+      z-index: 1;
+    }
+
+    .frosting {
+      position: absolute;
+      left: 50%;
+      bottom: 88px;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 100px;
+      z-index: 2;
+    }
+
+    .frosting .blob {
+      position: absolute;
+      background: linear-gradient(180deg, #fff, var(--frosting) 40%, #ffd0e8);
+      border-radius: 50%;
+      box-shadow: inset 0 -6px 12px rgba(255, 160, 200, 0.25);
+    }
+
+    .frosting .b1 { width: 128px; height: 72px; left: 6px; bottom: 0; }
+    .frosting .b2 { width: 100px; height: 62px; left: 20px; bottom: 28px; }
+    .frosting .b3 { width: 70px; height: 52px; left: 35px; bottom: 52px; }
+    .frosting .b4 { width: 42px; height: 36px; left: 49px; bottom: 72px; }
+
+    .drip {
+      position: absolute;
+      bottom: -8px;
+      width: 18px;
+      height: 26px;
+      background: linear-gradient(180deg, #ffd0e8, #ffb7d5);
+      border-radius: 0 0 12px 12px;
+      z-index: 2;
+    }
+    .drip.d1 { left: 22px; }
+    .drip.d2 { left: 58px; height: 32px; }
+    .drip.d3 { left: 98px; }
+
+    .toppings-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .placed {
+      position: absolute;
+      transform: translate(-50%, -50%) scale(0);
+      font-size: 1.55rem;
+      line-height: 1;
+      filter: drop-shadow(0 3px 4px rgba(120, 80, 100, 0.25));
+      animation: pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      user-select: none;
+    }
+
+    @keyframes pop-in {
+      to { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 20;
+      animation: sparkle-burst 0.55s ease-out forwards;
+    }
+
+    @keyframes sparkle-burst {
+      0% { opacity: 1; transform: translate(0, 0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.2); }
+    }
+
+    .tray-label {
+      margin: 0 0 0.45rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .tray {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.55rem;
+      margin-bottom: 1.1rem;
+      padding: 0.75rem;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.65);
+      box-shadow: 0 8px 22px var(--shadow);
+    }
+
+    .topping-btn {
+      width: 58px;
+      height: 58px;
+      border: 3px solid transparent;
+      border-radius: 18px;
+      background: linear-gradient(160deg, #fff, var(--peach));
+      font-size: 1.55rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(255, 180, 150, 0.35);
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+      display: grid;
+      place-items: center;
+      padding: 0;
+    }
+
+    .topping-btn:nth-child(2) { background: linear-gradient(160deg, #fff, var(--pink)); }
+    .topping-btn:nth-child(3) { background: linear-gradient(160deg, #fff, var(--lavender)); }
+    .topping-btn:nth-child(4) { background: linear-gradient(160deg, #fff, #ffc0cb); }
+    .topping-btn:nth-child(5) { background: linear-gradient(160deg, #fff, var(--mint)); }
+    .topping-btn:nth-child(6) { background: linear-gradient(160deg, #fff, #ffd6ea); }
+
+    .topping-btn:hover { transform: translateY(-2px) scale(1.05); }
+    .topping-btn:active { transform: scale(0.95); }
+
+    .topping-btn.selected {
+      border-color: var(--pink-deep);
+      box-shadow: 0 0 0 4px rgba(255, 142, 196, 0.35), 0 6px 14px var(--shadow);
+      transform: scale(1.08);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0.7rem 1.35rem;
+      font: inherit;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(135deg, #ff8ec4, #c89bff);
+      box-shadow: 0 6px 16px var(--shadow);
+      transition: transform 0.15s, filter 0.15s;
+    }
+
+    .btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
+    .btn:active { transform: scale(0.97); }
+
+    .btn.secondary {
+      background: linear-gradient(135deg, #7ed9c4, #a8e6cf);
+      color: #3d6b5e;
+      box-shadow: 0 6px 16px rgba(126, 217, 196, 0.4);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 1.5rem;
+      transform: translateX(-50%) translateY(120%);
+      padding: 0.7rem 1.25rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 8px 24px var(--shadow);
+      font-weight: 700;
+      font-size: 1.05rem;
+      z-index: 100;
+      opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.35s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .counter {
+      margin-top: 0.85rem;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .floaty {
+      position: absolute;
+      font-size: 1rem;
+      opacity: 0.5;
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+      user-select: none;
+    }
+    .floaty.f1 { top: 8%; left: 8%; animation-delay: 0s; }
+    .floaty.f2 { top: 12%; right: 10%; animation-delay: 1.2s; }
+    .floaty.f3 { bottom: 18%; left: 6%; animation-delay: 2s; }
+    .floaty.f4 { bottom: 12%; right: 8%; animation-delay: 0.6s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="floaty f1" aria-hidden="true">✨</div>
+    <div class="floaty f2" aria-hidden="true">💗</div>
+    <div class="floaty f3" aria-hidden="true">🌟</div>
+    <div class="floaty f4" aria-hidden="true">🧁</div>
+
+    <h1>Cupcake Day</h1>
+    <p class="subtitle">Decorate a sweet treat for Crystal</p>
+    <p class="hint" id="hint">Pick a topping, then tap the cupcake!</p>
+
+    <div class="stage" id="stage" role="img" aria-label="Cupcake decorating area">
+      <div class="cupcake" id="cupcake">
+        <div class="wrapper"></div>
+        <div class="cake"></div>
+        <div class="frosting">
+          <div class="drip d1"></div>
+          <div class="drip d2"></div>
+          <div class="drip d3"></div>
+          <div class="blob b1"></div>
+          <div class="blob b2"></div>
+          <div class="blob b3"></div>
+          <div class="blob b4"></div>
+        </div>
+        <div class="toppings-layer" id="toppingsLayer"></div>
+      </div>
+    </div>
+
+    <p class="tray-label">Topping tray</p>
+    <div class="tray" id="tray" role="toolbar" aria-label="Toppings">
+      <button type="button" class="topping-btn" data-emoji="✨" data-name="sprinkles" title="Sprinkles" aria-pressed="false">✨</button>
+      <button type="button" class="topping-btn" data-emoji="🍒" data-name="cherry" title="Cherry" aria-pressed="false">🍒</button>
+      <button type="button" class="topping-btn" data-emoji="⭐" data-name="star" title="Star" aria-pressed="false">⭐</button>
+      <button type="button" class="topping-btn" data-emoji="💕" data-name="heart" title="Heart" aria-pressed="false">💕</button>
+      <button type="button" class="topping-btn" data-emoji="🫧" data-name="pearl" title="Candy pearl" aria-pressed="false">🫧</button>
+      <button type="button" class="topping-btn" data-emoji="🎀" data-name="bow" title="Little bow" aria-pressed="false">🎀</button>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn" id="resetBtn">New cupcake</button>
+      <button type="button" class="btn secondary" id="surpriseBtn">Surprise me!</button>
+    </div>
+    <p class="counter" id="counter">Toppings: 0</p>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      var TOPPINGS = {
+        sprinkles: "✨",
+        cherry: "🍒",
+        star: "⭐",
+        heart: "💕",
+        pearl: "🫧",
+        bow: "🎀"
+      };
+
+      var TOASTS = [
+        "Yum!",
+        "So cute!",
+        "Sparkle power!",
+        "Crystal will love this!",
+        "Extra sweet!",
+        "Aww, adorable!",
+        "More frosting vibes!",
+        "Pretty as a peach!"
+      ];
+
+      var selected = null;
+      var count = 0;
+      var toastTimer = null;
+      var lastToastAt = 0;
+
+      var stage = document.getElementById("stage");
+      var layer = document.getElementById("toppingsLayer");
+      var tray = document.getElementById("tray");
+      var hint = document.getElementById("hint");
+      var toast = document.getElementById("toast");
+      var counter = document.getElementById("counter");
+      var resetBtn = document.getElementById("resetBtn");
+      var surpriseBtn = document.getElementById("surpriseBtn");
+      var buttons = tray.querySelectorAll(".topping-btn");
+
+      function setSelected(name) {
+        selected = name;
+        buttons.forEach(function (btn) {
+          var on = btn.getAttribute("data-name") === name;
+          btn.classList.toggle("selected", on);
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+        hint.textContent = name
+          ? "Tap the frosting to place your " + name + "!"
+          : "Pick a topping, then tap the cupcake!";
+      }
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toast.classList.remove("show");
+        }, 1600);
+      }
+
+      function maybeToast() {
+        if (count < 3) return;
+        if (count % 3 !== 0) return;
+        var now = Date.now();
+        if (now - lastToastAt < 1200) return;
+        lastToastAt = now;
+        var msg = TOASTS[Math.floor(Math.random() * TOASTS.length)];
+        showToast(msg);
+      }
+
+      function sparkleBurst(clientX, clientY) {
+        var rect = stage.getBoundingClientRect();
+        var colors = ["#ff8ec4", "#c89bff", "#7ed9c4", "#ffd4b8", "#fff", "#ffb7d5"];
+        for (var i = 0; i < 10; i++) {
+          var s = document.createElement("span");
+          s.className = "sparkle";
+          s.style.left = (clientX - rect.left) + "px";
+          s.style.top = (clientY - rect.top) + "px";
+          s.style.background = colors[i % colors.length];
+          var angle = (Math.PI * 2 * i) / 10 + Math.random() * 0.4;
+          var dist = 28 + Math.random() * 36;
+          s.style.setProperty("--dx", Math.cos(angle) * dist + "px");
+          s.style.setProperty("--dy", Math.sin(angle) * dist + "px");
+          stage.appendChild(s);
+          (function (el) {
+            setTimeout(function () { el.remove(); }, 560);
+          })(s);
+        }
+      }
+
+      function placeAt(clientX, clientY, emoji) {
+        var cupcake = document.getElementById("cupcake");
+        var rect = cupcake.getBoundingClientRect();
+        var x = ((clientX - rect.left) / rect.width) * 100;
+        var y = ((clientY - rect.top) / rect.height) * 100;
+
+        // Soft clamp toward frosting area
+        x = Math.max(18, Math.min(82, x));
+        y = Math.max(12, Math.min(58, y));
+
+        var el = document.createElement("span");
+        el.className = "placed";
+        el.textContent = emoji;
+        el.style.left = x + "%";
+        el.style.top = y + "%";
+        el.style.fontSize = (1.25 + Math.random() * 0.55) + "rem";
+        el.style.zIndex = String(10 + count);
+        layer.appendChild(el);
+
+        count += 1;
+        counter.textContent = "Toppings: " + count;
+        sparkleBurst(clientX, clientY);
+        maybeToast();
+      }
+
+      function onStagePointer(e) {
+        if (!selected) {
+          hint.textContent = "Choose a topping from the tray first!";
+          hint.style.animation = "none";
+          void hint.offsetWidth;
+          hint.style.animation = "";
+          return;
+        }
+        e.preventDefault();
+        var point = e.touches && e.touches[0] ? e.touches[0] : e;
+        placeAt(point.clientX, point.clientY, TOPPINGS[selected] || "✨");
+      }
+
+      tray.addEventListener("click", function (e) {
+        var btn = e.target.closest(".topping-btn");
+        if (!btn) return;
+        var name = btn.getAttribute("data-name");
+        if (selected === name) {
+          setSelected(null);
+        } else {
+          setSelected(name);
+        }
+      });
+
+      stage.addEventListener("pointerdown", onStagePointer);
+      stage.addEventListener("touchstart", onStagePointer, { passive: false });
+
+      resetBtn.addEventListener("click", function () {
+        layer.innerHTML = "";
+        count = 0;
+        counter.textContent = "Toppings: 0";
+        setSelected(null);
+        showToast("Fresh cupcake ready!");
+      });
+
+      surpriseBtn.addEventListener("click", function () {
+        var names = Object.keys(TOPPINGS);
+        var n = 5 + Math.floor(Math.random() * 5);
+        var cupcake = document.getElementById("cupcake");
+        var rect = cupcake.getBoundingClientRect();
+        for (var i = 0; i < n; i++) {
+          (function (delay) {
+            setTimeout(function () {
+              var name = names[Math.floor(Math.random() * names.length)];
+              var cx = rect.left + rect.width * (0.25 + Math.random() * 0.5);
+              var cy = rect.top + rect.height * (0.18 + Math.random() * 0.35);
+              placeAt(cx, cy, TOPPINGS[name]);
+            }, delay);
+          })(i * 90);
+        }
+        setSelected(null);
+      });
+    })();
+  </script>
+</body>
+</html>
